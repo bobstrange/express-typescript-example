@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node dist/index.js",
+    "dev": "nodemon -L",
     "lint": "tslint --project . --fix 'src/**/*.ts' 'test/**/*.ts'",
-    "watch": "tsc --watch"
+    "ts-node": "ts-node"
   },
   "keywords": [],
   "author": "bobStrange <bob.is.strange.1983@gmail.com> (https://github.com/bob1983)",
@@ -16,7 +16,9 @@
   },
   "devDependencies": {
     "@types/express": "^4.16.1",
+    "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
+    "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
