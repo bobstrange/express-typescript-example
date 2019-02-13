@@ -2,8 +2,11 @@
   "compilerOptions": {
     "outDir": "./dist",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
+    "noImplicitAny": true,
     "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
     "removeComments": true
   },
   "include": [
