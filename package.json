@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -L",
+    "build": "tsc",
     "lint": "tslint --project . --fix 'src/**/*.ts' 'test/**/*.ts'",
     "ts-node": "ts-node"
   },
