@@ -5,6 +5,7 @@ const port = 8080
 
 app.get('/', (req, res) => res.send('Hello Bob'))
 app.get('/programs', ProgramsController.list)
+app.get('/programs/:name', ProgramsController.show)
 
 app.listen(port, () => {
   console.log(`Listening localhost:${port}`)

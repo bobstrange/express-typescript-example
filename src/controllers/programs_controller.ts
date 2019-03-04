@@ -12,6 +12,6 @@ export const list = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
   const name = req.params.name as string;
-  const program = await OnsenWrapper.fetch(name).catch(errorHandler(res))
+  const program = await OnsenWrapper.fetchProgram(name).catch(errorHandler(res))
   res.json(program)
 }
