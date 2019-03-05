@@ -1,8 +1,5 @@
 import * as Onsen from 'onsen-node'
 
-interface Program {
-  name: string
-}
 /**
  * Wrap onsen-node getList()
  */
