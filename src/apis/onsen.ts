@@ -2,10 +2,11 @@ import * as Onsen from 'onsen-node'
 
 interface Program {
   name: string
-
 }
-
-const getList = (): Promise<object> => {
+/**
+ * Wrap onsen-node getList()
+ */
+const getList = (): Promise<any> => {
   return new Promise(resolve => {
     Onsen.getList((list: Array<any>) => {
       resolve(list)
@@ -14,17 +15,12 @@ const getList = (): Promise<object> => {
 }
 
 class Program {
-  name: string
-  personality: string
-  updateDate: Date
-  count: number
-
-  constructor(name: string, personality: string, updateDate: Date, count: number) {
-    this.name = name
-    this.personality = personality
-    this.updateDate = updateDate
-    this.count = count
-  }
+  constructor(
+    readonly title: string,
+    readonly personality: string,
+    readonly updateDate: Date,
+    readonly count: number
+  ) {}
 }
 // {
 //   type: "sound",
@@ -64,7 +60,11 @@ class Program {
 //   cm: [ ],
 //   allowExpand: "false"
 //   }
-const getProgram = (programName: string): Promise<object> => {
+
+/**
+ * Wrap onsen-node getInfo()
+ */
+const getProgram = (programName: string): Promise<any> => {
   return new Promise(resolve => {
     Onsen.getInfo(programName, (info: any) => {
       resolve(info)
@@ -72,12 +72,28 @@ const getProgram = (programName: string): Promise<object> => {
   })
 }
 
-export const fetchProgram = async (programName: string): Promise<any> => {
-  const program = await getProgram(programName)
+/**
+ * Convert 'yyyy.m.d' to Date
+ * @param {string} update - Example '2019.1.10'
+ */
+const updateToDate = (update: string): Date => {
+  const delimiter = '.'
+  const [year, month, day] = update.split(delimiter).map(item => Number.parseInt(item, 10))
+  return new Date(year, month, day)
+}
+
+export const fetchProgram = async (programName: string): Promise<Program> => {
+  const programParams = await getProgram(programName)
+  const program = new Program(
+    programParams.title,
+    programParams.personality,
+    updateToDate(programParams.update),
+    programParams.count
+  )
   return program
 }
 
-export const fetchPrograms = async (): Promise<object> => {
+export const fetchPrograms = async (): Promise<any> => {
   const list = await getList()
   // const sample = {
   //   mon: [
