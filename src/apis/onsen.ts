@@ -1,4 +1,6 @@
 import * as Onsen from 'onsen-node'
+import mongoose from 'mongoose';
+
 
 /**
  * Wrap onsen-node getList()
