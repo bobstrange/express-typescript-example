@@ -1,9 +1,9 @@
 import * as express from 'express'
 import * as ProgramsController from './controllers/programs_controller'
-import { MONGODB_URI } from './config'
+import { APP_PORT } from './config'
 
 const app = express()
-const port = 8080
+const port = APP_PORT
 
 app.get('/', (req, res) => res.send('Hello Bob'))
 app.get('/programs', ProgramsController.list)
