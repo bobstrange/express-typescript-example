@@ -1,4 +1,5 @@
 import axios from 'axios'
+import fs from 'fs'
 
 const LIST_URL = 'http://www.onsen.ag/api/shownMovie/shownMovie.json'
 const SHOW_URL = "http://www.onsen.ag/data/api/getMovieInfo";
@@ -64,8 +65,26 @@ class ProgramFactory {
 }
 
 test.skip('list request', async () => {
-  const response = await axios({ method: 'get', url: LIST_URL })
-  console.log(response['data']['result'])
+  // const response = await axios({ method: 'get', url: LIST_URL })
+  const result = JSON.parse(await fs.promises.readFile('list_results.json', 'utf-8'))
+  const response = { data: result }
+  expect(response.data.result[0]).toBe('mhr3')
+  expect(response.data.result[response.data.result.length - 1]).toBe('koitate')
+  // await fs.promises.writeFile('list_results.json', JSON.stringify(response['data']))
+})
+
+test('loop show request', async () => {
+  const lists = JSON.parse(await fs.promises.readFile('list_results.json', 'utf-8')).result as string[]
+
+  const result = await Promise.all(
+    lists.map(async item => {
+      const response = await axios({ method: 'get', url: `${SHOW_URL}/${item}` })
+      const data = response.data
+      await fs.promises.writeFile(`show_result_${item}.json`, JSON.stringify(data))
+      return data
+    })
+  )
+  console.log(result)
 })
 
 test.skip('show request', async () => {
