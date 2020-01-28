@@ -63,17 +63,33 @@ class ProgramFactory {
     )
   }
 }
+import Path from 'path'
+const fixtureDir = Path.resolve(process.cwd(), 'fixtures')
 
-test.skip('list request', async () => {
+const saveFixture = async (filename: string, data: any): Promise<void> => {
+  const path = Path.resolve(fixtureDir, filename)
+  await fs.promises.writeFile(path, JSON.stringify(data))
+}
+
+const loadFixture = async (filename: string): Promise<any> => {
+  const path = Path.resolve(fixtureDir, filename)
+  return JSON.parse(await fs.promises.readFile(path, 'utf-8'))
+}
+
+test('list request', async () => {
   // const response = await axios({ method: 'get', url: LIST_URL })
-  const result = JSON.parse(await fs.promises.readFile('list_results.json', 'utf-8'))
+  const result = await loadFixture('list_results.json')
   const response = { data: result }
   expect(response.data.result[0]).toBe('mhr3')
   expect(response.data.result[response.data.result.length - 1]).toBe('koitate')
-  // await fs.promises.writeFile('list_results.json', JSON.stringify(response['data']))
+
+  console.log(process.cwd())
+  console.log(__dirname)
+  console.log(__filename)
+  // await saveFixture('list_results.json', response['data'])
 })
 
-test('loop show request', async () => {
+test.skip('loop show request', async () => {
   const lists = JSON.parse(await fs.promises.readFile('list_results.json', 'utf-8')).result as string[]
 
   const result = await Promise.all(
