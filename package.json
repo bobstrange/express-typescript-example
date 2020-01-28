@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev:watch": "ts-node-dev --respawn --transpileOnly src/index.ts",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "bobStrange <bob.is.strange.1983@gmail.com> (https://github.com/bob1983)",
@@ -24,6 +25,7 @@
     "dts-gen": "^0.6.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-jest": "^23.6.0",
     "jest": "^25.1.0",
     "npm-check-updates": "^4.0.1",
     "prettier": "^1.19.1",
