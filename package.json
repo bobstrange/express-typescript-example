@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev:watch": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "jest --watch"
+    "test": "jest",
+    "test:watch": "jest"
   },
   "keywords": [],
   "author": "bobStrange <bob.is.strange.1983@gmail.com> (https://github.com/bob1983)",
