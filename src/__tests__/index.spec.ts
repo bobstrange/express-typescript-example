@@ -1,5 +1,6 @@
 import axios from 'axios'
-import fs from 'fs'
+import { loadFixture, saveFixture } from '../test_helper/fixture'
+import BPromise from 'bluebird'
 
 const LIST_URL = 'http://www.onsen.ag/api/shownMovie/shownMovie.json'
 const SHOW_URL = "http://www.onsen.ag/data/api/getMovieInfo";
@@ -63,18 +64,6 @@ class ProgramFactory {
     )
   }
 }
-import Path from 'path'
-const fixtureDir = Path.resolve(process.cwd(), 'fixtures')
-
-const saveFixture = async (filename: string, data: any): Promise<void> => {
-  const path = Path.resolve(fixtureDir, filename)
-  await fs.promises.writeFile(path, JSON.stringify(data))
-}
-
-const loadFixture = async (filename: string): Promise<any> => {
-  const path = Path.resolve(fixtureDir, filename)
-  return JSON.parse(await fs.promises.readFile(path, 'utf-8'))
-}
 
 test('list request', async () => {
   // const response = await axios({ method: 'get', url: LIST_URL })
@@ -89,16 +78,24 @@ test('list request', async () => {
   // await saveFixture('list_results.json', response['data'])
 })
 
-test.skip('loop show request', async () => {
-  const lists = JSON.parse(await fs.promises.readFile('list_results.json', 'utf-8')).result as string[]
+const sleep = async (msec: number): Promise<void> => new Promise(resolve => setTimeout(resolve, msec));
 
-  const result = await Promise.all(
-    lists.map(async item => {
+test('loop show request', async () => {
+  const fixture = await loadFixture('list_results.json')
+  const lists = fixture.result.slice(0, 10) as string[]
+
+  const result = await BPromise.map(
+    lists,
+    (async item => {
+      console.log(`request: ${item}`)
       const response = await axios({ method: 'get', url: `${SHOW_URL}/${item}` })
       const data = response.data
-      await fs.promises.writeFile(`show_result_${item}.json`, JSON.stringify(data))
+      await saveFixture(`show_results/${item}.json`, data)
+      await sleep(2000)
+      console.log(`item: ${item}`)
       return data
-    })
+    }),
+    { concurrency: 5 }
   )
   console.log(result)
 })
