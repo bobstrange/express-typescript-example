@@ -4,6 +4,11 @@ saveFetchShownMovieFixture()
 const items = [
   'toshitai',
   'kokuradio',
-  'tojinomiko'
+  'tojinomiko',
+  'home',
+  'tate',
+  'iine'
 ]
 items.forEach(saveFetchMovieInfoFixture)
+saveFetchMovieInfoFixture('error')
+
