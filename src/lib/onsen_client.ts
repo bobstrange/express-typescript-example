@@ -38,6 +38,7 @@ export interface MovieInfoSuccessResult {
   count: string
   link: ProgramLink[]
 }
+
 export interface MovieInfoErrorResult {
   error: string
 }
@@ -53,7 +54,6 @@ export class OnsenClient {
   }
   static async fetchMovieInfo(movieName: string): Promise<MovieInfoResult> {
     const response = await axios.get<MovieInfoResponseData>(`${SHOW_URL}/${movieName}`)
-    console.log(response)
     return unwrapJsonp<MovieInfoResult>(response.data)
   }
 }
