@@ -67,28 +67,3 @@ describe('OnsenClient', () => {
     })
   })
 })
-// const sleep = async (msec: number): Promise<void> =>
-  // new Promise(resolve => setTimeout(resolve, msec));
-    // test.skip("loop show request", async () => {
-    //   const fixture = await loadFixture("list_results.json");
-    //   const lists = fixture.result.slice(0, 10) as string[];
-
-    //   const result = await BPromise.map(
-    //     lists,
-    //     async item => {
-    //       console.log(`request: ${item}`);
-    //       const response = await axios({
-    //         method: "get",
-    //         url: `${SHOW_URL}/${item}`
-    //       });
-    //       const data = response.data;
-    //       await saveFixture(`show_results/${item}.json`, data);
-    //       await sleep(2000);
-    //       console.log(`item: ${item}`);
-    //       return data;
-    //     },
-    //     { concurrency: 5 }
-    //   );
-    //   console.log(result);
-    // });
-
