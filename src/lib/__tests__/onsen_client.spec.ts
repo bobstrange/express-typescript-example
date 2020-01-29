@@ -14,47 +14,57 @@ describe('OnsenClient', () => {
     expect(data[data.length - 1]).toBe('koitate')
   })
 
-  test('fetchMovieInfo', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (Axios.get as any).mockResolvedValue({ data: await loadFetchMovieInfoFixture('toshitai') })
-    const data = await OnsenClient.fetchMovieInfo('toshitai')
+  describe('fetchMovieInfo', () => {
+    test('returns movie information', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (Axios.get as any).mockResolvedValue({ data: await loadFetchMovieInfoFixture('toshitai') })
+      const data = await OnsenClient.fetchMovieInfo('toshitai')
 
-    expect(data).toEqual(
-      {
-        type: 'sound',
-        thumbnailPath: '/program/toshitai/image/327_pgi05_m.jpg',
-        moviePath: {
-          pc: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3',
-          iPhone: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3',
-          Android: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3'
-        },
-        title: 'セブン-イレブン presents 佐倉としたい大西',
-        personality: '佐倉綾音 / 大西沙織',
-        guest: '',
-        update: '2020.1.28',
-        count: '200',
-        schedule: '毎週火曜配信 / 超！A＆G＋：23時30分～24時（動画配信） ＜音泉＞：24時～（音声配信）＋音声ダケの特別コーナー有',
-        optionText: '',
-        mail: 'toshitai@joqr.net',
-        copyright: '©文化放送 ©Internet Radio Station＜音泉＞',
-        url: 'toshitai',
-        link: [
-          {
-            imagePath: '/program/toshitai/image/327_pgl01.jpg',
-            url: 'http://www.agqr.jp/'
-          }
-        ],
-        recommendGoods: [],
-        recommendMovie: [
-          {
-            imagePath: '/program/saekano/image/201_pgi03_b.jpg',
-            url: '/program/saekano/'
-          }
-        ],
-        cm: [],
-        allowExpand: 'false'
-      }
-    )
+      expect(data).toEqual(
+        {
+          type: 'sound',
+          thumbnailPath: '/program/toshitai/image/327_pgi05_m.jpg',
+          moviePath: {
+            pc: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3',
+            iPhone: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3',
+            Android: 'https://onsen-dl.sslcs.cdngc.net/radio/toshitai200128Tu7R.mp3'
+          },
+          title: 'セブン-イレブン presents 佐倉としたい大西',
+          personality: '佐倉綾音 / 大西沙織',
+          guest: '',
+          update: '2020.1.28',
+          count: '200',
+          schedule: '毎週火曜配信 / 超！A＆G＋：23時30分～24時（動画配信） ＜音泉＞：24時～（音声配信）＋音声ダケの特別コーナー有',
+          optionText: '',
+          mail: 'toshitai@joqr.net',
+          copyright: '©文化放送 ©Internet Radio Station＜音泉＞',
+          url: 'toshitai',
+          link: [
+            {
+              imagePath: '/program/toshitai/image/327_pgl01.jpg',
+              url: 'http://www.agqr.jp/'
+            }
+          ],
+          recommendGoods: [],
+          recommendMovie: [
+            {
+              imagePath: '/program/saekano/image/201_pgi03_b.jpg',
+              url: '/program/saekano/'
+            }
+          ],
+          cm: [],
+          allowExpand: 'false'
+        }
+      )
+    })
+
+    test('returns error information', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (Axios.get as any).mockResolvedValue({ data: await loadFetchMovieInfoFixture('error') })
+      const data = await OnsenClient.fetchMovieInfo('error')
+      console.log(data)
+      expect(data.error).toBe('not found.')
+    })
   })
 })
 // const sleep = async (msec: number): Promise<void> =>
