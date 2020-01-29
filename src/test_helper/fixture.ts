@@ -16,6 +16,9 @@ export const loadFixture = async (filename: string): Promise<any> => {
 };
 
 const fetchShownMovieFixtureName = 'list_results.json'
+const fetchMovieInfoFixtureName = (movieName: string): string => {
+  return `movie_info_result_${movieName}.json`
+}
 
 export const saveFetchShownMovieFixture = async (): Promise<void> => {
   const data = await OnsenClient.fetchShownMovie()
@@ -25,4 +28,16 @@ export const saveFetchShownMovieFixture = async (): Promise<void> => {
 
 export const loadFetchShownMovieFixture = async (): Promise<any> => {
   return await loadFixture(fetchShownMovieFixtureName)
+}
+
+export const saveFetchMovieInfoFixture = async (movieName: string): Promise<void> => {
+  const data = await OnsenClient.fetchMovieInfo(movieName)
+  const apiResponse = 'callback(' + JSON.stringify(data) + ') ;'
+  const fixtureName = fetchMovieInfoFixtureName(movieName)
+  await saveFixture(fixtureName, apiResponse)
+}
+
+export const loadFetchMovieInfoFixture = async (movieName: string): Promise<any> => {
+  const fixtureName = fetchMovieInfoFixtureName(movieName)
+  return await loadFixture(fixtureName)
 }
