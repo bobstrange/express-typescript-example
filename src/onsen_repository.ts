@@ -1,4 +1,4 @@
-import { OnsenClient } from './lib/onsen_client'
+import { OnsenClient, buildOnsenClient } from './lib/onsen_client'
 
 type ProgramMoviePath = {
   pc: string
@@ -26,37 +26,44 @@ class Program {
   ) {}
 }
 
-class ProgramFactory {
-  static buildFromShowApiResponse(response: ShowApiSuccessResponse): Program {
-    const [year, month, day] = response.update.split('.').map(_ => Number(_))
-    const personalities = response.personality.split('/').map(_ => _.trim())
+// class ProgramFactory {
+//   static buildFromShowApiResponse(response: ShowApiSuccessResponse): Program {
+//     const [year, month, day] = response.update.split('.').map(_ => Number(_))
+//     const personalities = response.personality.split('/').map(_ => _.trim())
 
-    return new Program(
-      response.url,
-      response.type,
-      response.thumbnailPath,
-      response.moviePath,
-      response.title,
-      personalities,
-      response.guest,
-      new Date(year, month, day),
-      Number(response.count),
-      response.link
-    )
-  }
-}
+//     return new Program(
+//       response.url,
+//       response.type,
+//       response.thumbnailPath,
+//       response.moviePath,
+//       response.title,
+//       personalities,
+//       response.guest,
+//       new Date(year, month, day),
+//       Number(response.count),
+//       response.link
+//     )
+//   }
+// }
 interface OnsenRepositoryInterface {
   fetchProgramNames(): Promise<string[]>
-  fetchProgram(name: string): Promise<Program>
+  // fetchProgram(name: string): Promise<Program>
 }
 
-class OnsenRepository implements OnsenRepositoryInterface {
+export class OnsenRepository implements OnsenRepositoryInterface {
+  constructor(private client: OnsenClient) {
+  }
+
   async fetchProgramNames(): Promise<string[]> {
-    return await OnsenClient.fetchShownMovie()
+    return await this.client.fetchShownMovie()
   }
 
-  async fetchProgram(name: string): Promise<Program> {
-    const result = await OnsenClient.fetchMovieInfo(name)
+  // async fetchProgram(name: string): Promise<Program> {
+  //   const result = await OnsenClient.fetchMovieInfo(name)
 
-  }
+  // }
+}
+
+export const buildOnsenRepository = (): OnsenRepository => {
+  return new OnsenRepository(buildOnsenClient())
 }
