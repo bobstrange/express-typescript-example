@@ -1,15 +1,29 @@
-import { OnsenClient } from '../onsen_client'
-import { loadFetchShownMovieFixture, loadFetchMovieInfoFixture } from '../../test_helper/fixture'
+import {
+  OnsenClient,
+  buildOnsenClient,
+  MovieInfoErrorResult
+} from '../onsen_client'
+
+import {
+  loadFetchShownMovieFixture,
+  loadFetchMovieInfoFixture
+} from '../../test_helper/fixture'
 
 jest.mock('axios')
 import Axios from 'axios'
 
 describe('OnsenClient', () => {
+  let client: OnsenClient;
+
+  beforeEach(() => {
+    client = buildOnsenClient()
+  })
+
   test('fetchShownMovie', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (Axios.get as any).mockResolvedValue({ data: await loadFetchShownMovieFixture() });
 
-    const data = await OnsenClient.fetchShownMovie()
+    const data = await client.fetchShownMovie()
     expect(data[0]).toBe('mhr3')
     expect(data[data.length - 1]).toBe('koitate')
   })
@@ -18,7 +32,7 @@ describe('OnsenClient', () => {
     test('returns movie information', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (Axios.get as any).mockResolvedValue({ data: await loadFetchMovieInfoFixture('toshitai') })
-      const data = await OnsenClient.fetchMovieInfo('toshitai')
+      const data = await client.fetchMovieInfo('toshitai')
 
       expect(data).toEqual(
         {
@@ -61,8 +75,7 @@ describe('OnsenClient', () => {
     test('returns error information', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (Axios.get as any).mockResolvedValue({ data: await loadFetchMovieInfoFixture('error') })
-      const data = await OnsenClient.fetchMovieInfo('error')
-      console.log(data)
+      const data = await client.fetchMovieInfo('error') as MovieInfoErrorResult
       expect(data.error).toBe('not found.')
     })
   })

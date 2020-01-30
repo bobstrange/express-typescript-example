@@ -48,12 +48,16 @@ export type MovieInfoResult = MovieInfoSuccessResult | MovieInfoErrorResult
 type MovieInfoResponseData = string
 
 export class OnsenClient {
-  static async fetchShownMovie(): Promise<ShownMovieResult> {
+  async fetchShownMovie(): Promise<ShownMovieResult> {
     const response = await axios.get<ShownMovieResponseData>(LIST_URL)
     return response.data.result
   }
-  static async fetchMovieInfo(movieName: string): Promise<MovieInfoResult> {
+  async fetchMovieInfo(movieName: string): Promise<MovieInfoResult> {
     const response = await axios.get<MovieInfoResponseData>(`${SHOW_URL}/${movieName}`)
     return unwrapJsonp<MovieInfoResult>(response.data)
   }
+}
+
+export const buildOnsenClient = (): OnsenClient => {
+  return new OnsenClient()
 }
