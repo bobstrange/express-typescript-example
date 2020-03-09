@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:latest'
+    environment:
+      - POSTGRES_PASSWORD=onsen-db-password
+  api:
+    build:
+      context: './api'
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./api:/app
+    ports:
+      - '8080:3000'
+    environment:
+      - PGHOST=db
+      - PGUSER=postgres
+      - PGDATABASE=onsen
+      - PGPASSWORD=onsen-db-password
+      - PGPORT=5432
