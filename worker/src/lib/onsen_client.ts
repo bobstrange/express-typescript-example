@@ -8,10 +8,8 @@ const unwrapJsonp = <T>(jsonp: string): T => {
   return JSON.parse(text)
 }
 
-type ShownMovieResult = string[]
-
-interface ShownMovieResponseData {
-  result: ShownMovieResult
+interface ProgramNamesResponse {
+  result: string[]
 }
 
 type ProgramMoviePath = {
@@ -25,7 +23,7 @@ type ProgramLink = {
   url: string
 }
 
-export interface MovieInfoSuccessResult {
+export interface ProgramDetailSuccessResult {
   url: string
   type: string
   thumbnailPath: string
@@ -39,22 +37,20 @@ export interface MovieInfoSuccessResult {
   link: ProgramLink[]
 }
 
-export interface MovieInfoErrorResult {
+export interface ProgramDetailErrorResult {
   error: string
 }
 
-export type MovieInfoResult = MovieInfoSuccessResult | MovieInfoErrorResult
-
-type MovieInfoResponseData = string
+export type ProgramDetailResult = ProgramDetailSuccessResult | ProgramDetailErrorResult
 
 export class OnsenClient {
-  async fetchShownMovie(): Promise<ShownMovieResult> {
-    const response = await axios.get<ShownMovieResponseData>(LIST_URL)
+  async fetchProgramNames(): Promise<string[]> {
+    const response = await axios.get<ProgramNamesResponse>(LIST_URL)
     return response.data.result
   }
-  async fetchMovieInfo(movieName: string): Promise<MovieInfoResult> {
-    const response = await axios.get<MovieInfoResponseData>(`${SHOW_URL}/${movieName}`)
-    return unwrapJsonp<MovieInfoResult>(response.data)
+  async fetchProgramDetail(movieName: string): Promise<ProgramDetailResult> {
+    const response = await axios.get<string>(`${SHOW_URL}/${movieName}`)
+    return unwrapJsonp<ProgramDetailResult>(response.data)
   }
 }
 
