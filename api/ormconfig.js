@@ -9,7 +9,7 @@ const typeOrmConfigs = {
   password: process.env.DB_PASSWORD || dbConfig.password,
   database: process.env.DB_DATABASE_NAME || dbConfig.database_name,
   entities: [__dirname + '/src/entities/*.entity.{js,ts}'],
-  migrations: [__dirname + '/src/db/migrations/**/*.migration.{js,ts}'],
+  migrations: [__dirname + '/src/db/migrations/**/*.{js,ts}'],
   synchronize: process.env.TYPEORM_SYNC || dbConfig.synchronize,
   cli: {
     entitiesDir: 'src/entities',
