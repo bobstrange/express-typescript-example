@@ -1,7 +1,21 @@
+import { OnsenClient } from "../onsen_client"
+
+import axios from 'axios'
+jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>
+
 describe('OnsenClient', () => {
   describe('fetchProgramList', () => {
-    test('returns programs', () => {})
-    test('throw error when it fails to fetch data', () => {})
+    test('returns programs', async () => {
+      mockedAxios.get.mockResolvedValue({ data: { result: ['mhr3', 'koitate'] } })
+      const client = new OnsenClient()
+      await expect(client.fetchPrograms()).resolves.toEqual(['mhr3', 'koitate'])
+    })
+    test('throws error when it fails', async () => {
+      mockedAxios.get.mockRejectedValue(new Error('Error message'))
+      const client = new OnsenClient()
+      await expect(client.fetchPrograms()).rejects.toThrow('Error message')
+    })
   })
 })
 // import {
