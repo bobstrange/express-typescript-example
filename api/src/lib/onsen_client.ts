@@ -3,11 +3,11 @@ import axios from 'axios'
 const LIST_URL = 'http://www.onsen.ag/api/shownMovie/shownMovie.json'
 const SHOW_URL_BASE = "http://www.onsen.ag/data/api/getMovieInfo";
 
-// const unwrapJsonp = (jsonp: string) => {
-//   const text = jsonp.slice(9, jsonp.length - 3)
-//   console.log(text)
-//   return JSON.parse(text)
-// }
+const unwrapJsonp = (jsonp: string) => {
+  const text = jsonp.slice(9, jsonp.length - 3)
+  console.log(text)
+  return JSON.parse(text)
+}
 // type Program = {
 //   type: string
 //   thumbnailPath: string
