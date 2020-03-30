@@ -1,89 +1,9 @@
-import 'reflect-metadata';
-import { plainToClass, Expose, Type, Exclude, Transform } from 'class-transformer'
-import { OnsenClient } from "./onsen_client"
-import * as dayjs from 'dayjs';
-import * as customParseFormat from 'dayjs/plugin/customParseFormat'
-import 'dayjs/locale/ja'
-
-dayjs.extend(customParseFormat)
-
 import axios from 'axios'
+import { OnsenClient } from "./onsen_client"
+
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
-class Program {
-  @Expose()
-  title: string
-
-  @Expose()
-  thumbnailPath: string
-
-  @Expose({ name: 'moviePath' })
-  @Transform((value: { pc: string, Android: string, iPhone: string }) => {
-    return value.pc
-  })
-  filePath: string
-
-  @Expose({ name: 'update' })
-  @Transform((value: string) => {
-    const day = dayjs(value, 'YYYY.M.D').locale('ja').format('YYYY-MM-DD')
-    return day
-  })
-  updateAt: string
-}
-
-describe('transform', () => {
-  test('', () => {
-    const obj = {
-      type: 'sound',
-      thumbnailPath: '/program/yagakimi/image/619_pgi01_m.jpg',
-      moviePath: {
-        pc: 'https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3',
-        iPhone: 'https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3',
-        Android:
-          'https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3',
-      },
-      title: 'やがて君になる～私、このラジオ好きになりそう～',
-      personality: '高田憂希（小糸侑 役） / 寿美菜子（七海燈子 役）',
-      guest: '',
-      update: '2019.4.18',
-      count: '12',
-      schedule: '月1回木曜配信',
-      optionText: 'やがて君になる製作委員会',
-      mail: 'yagakimi@onsen.ag',
-      copyright: '©2018 仲谷 鳰／ＫＡＤＯＫＡＷＡ／やがて君になる製作委員会',
-      url: 'yagakimi',
-      link: [
-        {
-          imagePath: '/program/yagakimi/image/619_pgl01.jpg',
-          url: 'http://yagakimi.com/',
-        },
-      ],
-      recommendGoods: [],
-      recommendMovie: [
-        {
-          imagePath: '/program/yagakimi/image/619_pgl01.jpg',
-          url: 'http://yagakimi.com/',
-        }
-      ],
-      cm: [],
-      allowExpand: 'true',
-    };
-    const program = plainToClass(Program, obj, { excludeExtraneousValues: true });
-    expect(program).toEqual({
-      title: 'やがて君になる～私、このラジオ好きになりそう～',
-      thumbnailPath: '/program/yagakimi/image/619_pgi01_m.jpg',
-      filePath: 'https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3',
-      updateAt: '2019-04-18'
-      // personalities:
-      // guests:,
-      // updateAt:,
-      // schedule:,
-      // count:,
-    })
-    // expect(program.filePath).toEqual('https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3')
-  })
-})
 describe('OnsenClient', () => {
   describe('fetchProgramList', () => {
     test('returns program names', async () => {
