@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Program } from './program'
 
 const LIST_URL = 'http://www.onsen.ag/api/shownMovie/shownMovie.json'
 const SHOW_URL_BASE = "http://www.onsen.ag/data/api/getMovieInfo"
@@ -56,14 +57,14 @@ export class OnsenClient {
       throw(error)
     }
   }
+
   async fetchProgram(movieName: string): Promise<Object> {
     try {
       const data = (await axios.get<string>(
         showURL(movieName)
       )).data
       const object = unwrapJsonp<ShowSuccessResponse|ShowErrorResponse>(data)
-      console.log('Object:', object)
-      return object
+      return Program.program(object)
     } catch(error) {
       console.log('Error:=====: ', error)
     }
