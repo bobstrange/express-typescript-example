@@ -3,7 +3,7 @@ import { plainToClass, Expose, Type, Exclude, Transform } from 'class-transforme
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/ja'
-
+import { Link } from './onsen_client';
 dayjs.extend(customParseFormat)
 
 const transformNames = (input: string): string[] => {
@@ -12,11 +12,6 @@ const transformNames = (input: string): string[] => {
   }
   const names = input.split('/');
   return names.map(name => name.replace(/(\s$|^\s)/g, ''));
-};
-
-export type Link = {
-  imagePath: string;
-  url: string;
 };
 
 export class Program {

@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import 'reflect-metadata'
 import { Program } from './program'
 
 describe('Program', () => {
@@ -39,8 +39,8 @@ describe('Program', () => {
       ],
       cm: [],
       allowExpand: 'true',
-    };
-  });
+    }
+  })
 
   describe('program()', () => {
     test('transforms object to program', () => {
