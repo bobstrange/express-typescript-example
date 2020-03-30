@@ -3,7 +3,8 @@ import { plainToClass, Expose, Type, Exclude, Transform } from 'class-transforme
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/ja'
-import { Link } from './onsen_client';
+import { Link, ShowSuccessResponse } from './onsen_client';
+
 dayjs.extend(customParseFormat)
 
 const transformNames = (input: string): string[] => {
@@ -15,7 +16,7 @@ const transformNames = (input: string): string[] => {
 };
 
 export class Program {
-  static program(inputData: any): Program {
+  static program(inputData: ShowSuccessResponse): Program {
     return plainToClass(Program, inputData, {
       excludeExtraneousValues: true,
     })

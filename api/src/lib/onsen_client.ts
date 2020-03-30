@@ -64,7 +64,7 @@ export class OnsenClient {
     }
   }
 
-  async fetchProgram(titleAlias: string): Promise<Object> {
+  async fetchProgram(titleAlias: string): Promise<Program> {
     const data = (await axios.get<string>(
       showURL(titleAlias)
     )).data
