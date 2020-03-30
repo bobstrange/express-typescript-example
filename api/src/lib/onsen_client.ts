@@ -42,9 +42,10 @@ type ShowErrorResponse = {
   error: string
 }
 
-// function isFoo(arg: any): arg is Foo {
-//     return arg.foo !== undefined;
-// }
+const isErrorResponse = (arg: any): arg is ShowErrorResponse => {
+    return arg.error !== undefined;
+}
+
 const showURL = (movieName: string) => {
   return `${SHOW_URL_BASE}/${movieName}`
 }
@@ -58,17 +59,15 @@ export class OnsenClient {
     }
   }
 
-  async fetchProgram(movieName: string): Promise<Object> {
-    try {
-      const data = (await axios.get<string>(
-        showURL(movieName)
-      )).data
-      const object = unwrapJsonp<ShowSuccessResponse|ShowErrorResponse>(data)
-      return Program.program(object)
-    } catch(error) {
-      console.log('Error:=====: ', error)
+  async fetchProgram(titleAlias: string): Promise<Object> {
+    const data = (await axios.get<string>(
+      showURL(titleAlias)
+    )).data
+    const object = unwrapJsonp<ShowSuccessResponse|ShowErrorResponse>(data)
+    if (isErrorResponse(object)) {
+      throw new Error(`Program ${titleAlias} not found`)
     }
-
+    return Program.program(object)
   }
 }
 

@@ -24,8 +24,7 @@ describe('OnsenClient', () => {
 `})
 
       const client = new OnsenClient()
-      const result = await client.fetchProgram('yagakimi')
-      await expect(result).toEqual({
+      const expected = {
         thumbnailPath: '/program/yagakimi/image/619_pgi01_m.jpg',
         filePath: 'https://onsen-dl.sslcs.cdngc.net/radio/yagakimi190418F5Kg.mp3',
         title: 'やがて君になる～私、このラジオ好きになりそう～',
@@ -46,16 +45,19 @@ describe('OnsenClient', () => {
         ],
         recommendGoods: [],
         recommendMovies: []
-      });
+      }
+      expect(client.fetchProgram('yagakimi')).resolves.toEqual(expected)
     })
-    test.skip('throws not found error if program does not exist', () => {
+
+    test('throws not found error if program does not exist', () => {
       mockedAxios.get.mockResolvedValue({
         data: `callback({"error":"not found."});
 `
       })
       const client = new OnsenClient()
-      expect(async () => { await client.fetchProgram('not_exist_program') }).toThrow()
-
+      expect(client.fetchProgram('not_exist_program')).rejects.toBe(
+        new Error('Program not_exist_program not found')
+      )
     })
     test('throws error when it fails', () => {
 
