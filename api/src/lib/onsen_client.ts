@@ -50,6 +50,11 @@ const showURL = (movieName: string) => {
   return `${SHOW_URL_BASE}/${movieName}`
 }
 export class OnsenClient {
+  static client(): OnsenClient {
+    return new OnsenClient(Program)
+  }
+  constructor(private programFactory: typeof Program) {}
+
   async fetchPrograms(): Promise<string[]> {
     try {
       const result = (await axios.get<ListResponse>(LIST_URL)).data.result
@@ -67,7 +72,7 @@ export class OnsenClient {
     if (isErrorResponse(object)) {
       throw new Error(`Program ${titleAlias} not found`)
     }
-    return Program.program(object)
+    return this.programFactory.program(object)
   }
 }
 
