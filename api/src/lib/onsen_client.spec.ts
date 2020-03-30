@@ -18,7 +18,7 @@ describe('OnsenClient', () => {
     })
   })
 
-  describe.skip('fetchProgram', () => {
+  describe('fetchProgram', () => {
     test('returns program', async () => {
       mockedAxios.get.mockResolvedValue({ data: `callback({"type":"sound","thumbnailPath":"\/program\/yagakimi\/image\/619_pgi01_m.jpg","moviePath":{"pc":"https:\/\/onsen-dl.sslcs.cdngc.net\/radio\/yagakimi190418F5Kg.mp3","iPhone":"https:\/\/onsen-dl.sslcs.cdngc.net\/radio\/yagakimi190418F5Kg.mp3","Android":"https:\/\/onsen-dl.sslcs.cdngc.net\/radio\/yagakimi190418F5Kg.mp3"},"title":"やがて君になる～私、このラジオ好きになりそう～","personality":"高田憂希（小糸侑 役） \/ 寿美菜子（七海燈子 役）","guest":"","update":"2019.4.18","count":"12","schedule":"月1回木曜配信","optionText":"やがて君になる製作委員会","mail":"yagakimi@onsen.ag","copyright":"©2018 仲谷 鳰／ＫＡＤＯＫＡＷＡ／やがて君になる製作委員会","url":"yagakimi","link":[{"imagePath":"\/program\/yagakimi\/image\/619_pgl01.jpg","url":"http:\/\/yagakimi.com\/"}],"recommendGoods":[],"recommendMovie":[],"cm":[],"allowExpand":"true"});
 `})
@@ -53,6 +53,12 @@ describe('OnsenClient', () => {
       });
     })
     test('throws not found error if program does not exist', () => {
+      mockedAxios.get.mockResolvedValue({
+        data: `callback({"error":"not found."});
+`
+      })
+      const client = new OnsenClient()
+      expect(async () => { await client.fetchProgram('not_exist_program') }).toThrow()
 
     })
     test('throws error when it fails', () => {
