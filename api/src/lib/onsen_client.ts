@@ -49,6 +49,12 @@ const isErrorResponse = (arg: any): arg is ShowErrorResponse => {
 const showURL = (movieName: string) => {
   return `${SHOW_URL_BASE}/${movieName}`
 }
+
+const unwrapJsonp = <T>(jsonp: string): T => {
+  const text = jsonp.slice(9, jsonp.length - 3)
+  return JSON.parse(text)
+}
+
 export class OnsenClient {
   static client(): OnsenClient {
     return new OnsenClient(Program)
@@ -74,9 +80,4 @@ export class OnsenClient {
     }
     return this.programFactory.program(object)
   }
-}
-
-const unwrapJsonp = <T>(jsonp: string): T => {
-  const text = jsonp.slice(9, jsonp.length - 3)
-  return JSON.parse(text)
 }

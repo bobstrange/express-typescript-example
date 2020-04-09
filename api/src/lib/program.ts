@@ -1,68 +1,72 @@
-import 'reflect-metadata';
-import { plainToClass, Expose, Type, Exclude, Transform } from 'class-transformer'
-import * as dayjs from 'dayjs';
+import 'reflect-metadata'
+import {
+  plainToClass,
+  Expose,
+  Transform
+} from 'class-transformer'
+import * as dayjs from 'dayjs'
 import * as customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/ja'
-import { Link, ShowSuccessResponse } from './onsen_client';
+import { Link, ShowSuccessResponse } from './onsen_client'
 
 dayjs.extend(customParseFormat)
 
 const transformNames = (input: string): string[] => {
   if (input === '') {
-    return [];
+    return []
   }
-  const names = input.split('/');
-  return names.map(name => name.replace(/(\s$|^\s)/g, ''));
-};
+  const names = input.split('/')
+  return names.map(name => name.replace(/(\s$|^\s)/g, ''))
+}
 
 export class Program {
   static program(inputData: ShowSuccessResponse): Program {
     return plainToClass(Program, inputData, {
-      excludeExtraneousValues: true,
+      excludeExtraneousValues: true
     })
   }
-  @Expose() title: string;
-  @Expose() thumbnailPath: string;
+  @Expose() title: string
+  @Expose() thumbnailPath: string
   @Expose({ name: 'moviePath' })
   @Transform((value: { pc: string; Android: string; iPhone: string }) => {
-    return value.pc;
+    return value.pc
   })
-  filePath: string;
+  filePath: string
 
   @Expose({ name: 'update' })
   @Transform((value: string) => {
-    const day = dayjs(value, 'YYYY.M.D').locale('ja');
+    const day = dayjs(value, 'YYYY.M.D').locale('ja')
     if (!day.isValid()) {
-      return null;
+      return null
     }
-    return day.format('YYYY-MM-DD');
+    return day.format('YYYY-MM-DD')
   })
-  updateAt?: string;
+  updateAt?: string
 
   @Expose({ name: 'personality' })
   @Transform(transformNames)
-  personalities: string[];
+  personalities: string[]
 
   @Expose({ name: 'guest' })
   @Transform(transformNames)
-  guests: string[];
+  guests: string[]
 
-  @Expose() schedule: string;
-  @Expose() optionText: string;
-  @Expose() mail: string;
-  @Expose() copyright: string;
-  @Expose({ name: 'url' }) titleAlias: string;
+  @Expose() schedule: string
+  @Expose() optionText: string
+  @Expose() mail: string
+  @Expose() copyright: string
+  @Expose({ name: 'url' }) titleAlias: string
 
   @Expose()
   @Transform((value: string) => {
     if (value === '') {
-      return null;
+      return null
     }
-    return parseInt(value);
+    return parseInt(value)
   })
-  count?: number;
+  count?: number
 
-  @Expose({ name: 'link' }) links: Link[];
-  @Expose() recommendGoods: Link[];
-  @Expose({ name: 'recommendMovie' }) recommendMovies: Link[];
+  @Expose({ name: 'link' }) links: Link[]
+  @Expose() recommendGoods: Link[]
+  @Expose({ name: 'recommendMovie' }) recommendMovies: Link[]
 }
